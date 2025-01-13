@@ -14,20 +14,26 @@
 # ---
 
 # %% [markdown]
-# # Fase 1: Processamento dos Dados
+# # **Fase 1: Processamento dos Dados**
+# Este arquivo realiza o pré-processamento dos dados, preparando-os para as fases subsequentes de modelagem e análise. Abaixo está um resumo das principais etapas e funcionalidades implementadas nesta etapa.
 #
-# Este arquivo realiza o **pré-processamento** dos dados, preparando-os para as fases subsequentes de modelagem e análise. Abaixo está um resumo das principais etapas e funcionalidades implementadas nesta etapa.
-#
-# ## Etapas do Processamento
-#
-# ### 1. Importação das Bibliotecas
+# ## **Etapas do Processamento**
+# ### **1. Importação das Bibliotecas**
 # As bibliotecas necessárias para o processamento dos dados são importadas no início do arquivo, como:
-# - `pandas` para manipulação de dados
-# - `numpy` para operações numéricas
 #
-# ### 2. Carregamento do Dataset
-# O arquivo carrega os dados a partir de um arquivo CSV utilizando `pandas`
+# - **pandas:** para manipulação de dados
+# - **numpy:** para operações numéricas
+# ### **2. Carregamento do Dataset**
+# O arquivo carrega os dados a partir de um arquivo CSV utilizando pandas.
 #
+# ### **3. Transformação de Variáveis Categóricas**
+# As variáveis categóricas presentes no dataset são convertidas em variáveis numéricas para garantir que os modelos de aprendizado de máquina possam interpretá-las corretamente. Isso é feito utilizando técnicas como a codificação One-Hot Encoding ou Label Encoding, dependendo da natureza da variável.
+#
+# ### **4. Tratamento de Valores Nulos**
+# Os valores ausentes nas variáveis são tratados para evitar que afetem negativamente o modelo. Dependendo da estratégia adotada, os valores nulos podem ser preenchidos com a média, a mediana.
+#
+# ### **5. Salvamento dos Dados Processados**
+# Após as transformações e tratamentos realizados, os dados processados são salvos em um novo arquivo para uso nas etapas seguintes do modelo. O arquivo gerado é armazenado no formato CSV.
 
 # %%
 import pandas as pd
@@ -39,6 +45,12 @@ data = pd.read_csv('C:/Users/heloi/tcc/heart_2022_with_nans.csv')
 
 # %%
 data.head()
+data.columns
+
+# %%
+linhas, colunas = data.shape
+
+print(f"A base de dados possui {linhas} linhas e {colunas} colunas.")
 
 # %% [markdown]
 # ## Substituir valores nulos
@@ -164,3 +176,91 @@ if 'State' in data_copy.columns:
 data_copy.to_csv('processed_data.csv', index=False)
 
 # %%
+data_copy.columns
+
+# %%
+# Contar o número de colunas
+num_colunas = data_copy.shape[1]
+num_colunas
+
+# %%
+data_copy.columns.shape[0]
+
+# %%
+data_copy.columns
+
+# %%
+# Variáveis que não foram transformadas
+variaveis_nao_transformadas = [
+    'PhysicalHealthDays', 'MentalHealthDays', 'SleepHours', 'HeightInMeters',
+    'WeightInKilograms', 'BMI', 'AlcoholDrinkers', 'HIVTesting', 'FluVaxLast12', 'PneumoVaxEver', 'HighRiskLastYear'
+]
+
+# Verificar as colunas presentes na base de dados
+colunas_presentes = data_copy.columns
+
+# Verificar se as variáveis não transformadas estão na base de dados
+variaveis_nao_transformadas_presentes = [
+    col for col in variaveis_nao_transformadas if col in colunas_presentes
+]
+
+# Exibir as variáveis presentes na base de dados
+print("Variáveis não transformadas presentes na base de dados:", variaveis_nao_transformadas_presentes)
+
+# Verificar os valores únicos das variáveis não transformadas
+for col in variaveis_nao_transformadas_presentes:
+    print(f"Valores únicos da coluna '{col}':")
+    print(data_copy[col].unique())
+    print("-" * 50)
+
+
+# %%
+# ### FEATURE IMPORTANCE
+
+import pandas as pd
+import numpy as np
+
+feature_names = ['Sex', 'GeneralHealth', 'PhysicalHealthDays', 'MentalHealthDays',
+       'LastCheckupTime', 'PhysicalActivities', 'SleepHours', 'RemovedTeeth', 'HadAngina', 'HadStroke', 'HadAsthma',
+       'HadSkinCancer', 'HadCOPD', 'HadDepressiveDisorder', 'HadKidneyDisease',
+       'HadArthritis', 'DeafOrHardOfHearing', 'BlindOrVisionDifficulty',
+       'DifficultyConcentrating', 'DifficultyWalking',
+       'DifficultyDressingBathing', 'DifficultyErrands', 'ChestScan',
+       'AgeCategory', 'HeightInMeters', 'WeightInKilograms', 'BMI',
+       'AlcoholDrinkers', 'HIVTesting', 'FluVaxLast12', 'PneumoVaxEver',
+       'TetanusLast10Tdap', 'HighRiskLastYear',
+       'SmokerStatus_Current smoker - now smokes some days',
+       'SmokerStatus_Former smoker', 'SmokerStatus_Never smoked',
+       'ECigaretteUsage_Not at all (right now)',
+       'ECigaretteUsage_Use them every day',
+       'ECigaretteUsage_Use them some days', 'RaceEthnicityCategory_Hispanic',
+       'RaceEthnicityCategory_Multiracial, Non-Hispanic',
+       'RaceEthnicityCategory_Other race only, Non-Hispanic',
+       'RaceEthnicityCategory_White only, Non-Hispanic',
+       'CovidPos_Tested positive using home test without a health professional',
+       'CovidPos_Yes', 'HadDiabetes_No, pre-diabetes or borderline diabetes',
+       'HadDiabetes_Yes',
+       'HadDiabetes_Yes, but only during pregnancy (female)']
+
+# # Cria um DataFrame com as importâncias
+df_importancias = pd.DataFrame({'feature': feature_names, 'importancia': importances})
+
+# # Ordena o DataFrame pelas importâncias em ordem decrescente
+df_importancias = df_importancias.sort_values('importancia', ascending=False)
+
+# # Seleciona as 17 features mais importantes
+top_17_features = df_importancias['feature'].head(10).tolist()
+
+# Cria um novo DataFrame com apenas as features selecionadas
+df_filtrado = data[top_10_features]
+
+# Exibe as primeiras linhas do DataFrame filtrado para verificar
+print(df_filtrado.head())
+
+# Visualização das importâncias
+plt.figure(figsize=(10, 6))
+plt.barh(df_importancias['feature'].head(10), df_importancias['importancia'].head(10))
+plt.xlabel('Importância')
+plt.ylabel('Característica')
+plt.title('Top 17 Características Mais Importantes')
+plt.show()
