@@ -1,7 +1,7 @@
 # Heart Attack Prediction Using Machine Learning
 
-Este projeto visa desenvolver um modelo preditivo para identificar pacientes com risco elevado de sofrer um ataque cardíaco, utilizando técnicas de aprendizado de máquina. A partir de dados clínicos e comportamentais, o modelo é treinado com Regressão Logística e Random Forest.
+O objetivo deste trabalho é explorar algoritmos de aprendizado de máquina para treinamento e avaliação de um modelo preditivo de ataques cardíacos, utilizando um conjunto de dados clínicos previamente disponibilizados.
 
-A base de dados inclui informações sobre histórico médico, hábitos de saúde, atividade física e autoavaliação de saúde. O projeto abrange as etapas de pré-processamento dos dados, treinamento dos modelos e avaliação de desempenho utilizando métricas como acurácia, precisão, recall e F1-score.
+O projeto envolve a preparação e análise dos dados, bem como a exploração e seleção de algoritmos adequados.
 
-O objetivo é criar uma ferramenta que ajude na previsão de ataques cardíacos, permitindo a adoção de medidas preventivas e o diagnóstico precoce.
+A eficácia do modelo foi avaliada utilizando métricas de desempenho como acurácia, precisão, revocação e F1-score. Além disso, foi desenvolvido um protótipo de interface gráfica para simplificar a visualização dos resultados obtidos, demonstrando a aplicabilidade prática da abordagem.
